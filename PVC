@@ -1,0 +1,63 @@
+
+Persistent volumes 
+===================
+
+deploy a kubernetes using Kops  
+
+10:25am - 11:45am 
+
+PV --> It's a piece of storage (hostPath, nfs,ebs,azurefile,azuredisk) in k8s cluster. 
+PV exists independently from from pod life cycle form which it is consuming.
+
+PersistentVolumeClaim -->
+   It's request for storage(Volume).Using PVC we can request(Specify) 
+   how much storage u need and with what access mode u need.
+        
+Persistent Volumes are provisioned in two ways, Statically or Dynamically.:
+
+1) Static Volumes (Manual Provisionging)
+    A k8's Administrator can create a PV manually so that pv's can be available for PODS which requires.
+    Create a PVC so that PVC will be attached PV. We can use PVC with PODS to get an access to PV. 
+
+2) Dynamic Volumes (Dynamic Provisioning)
+     It's possible to have k8s provision(Create) volumes(PV) as required. 
+     Provided we have configured A storageClass [sc].
+     So when we create PVC if PV is not available Storage Class will Create PV dynamically.
+   
+PVC: If pod requires access to storage(PV),it will get an access using PVC. PVC will be attached to PV.
+
+PersistentVolume – the low level representation of a storage volume.
+PersistentVolumeClaim – the binding between a Pod and PersistentVolume.
+Pod – a running container that will consume a PersistentVolume.
+StorageClass – allows for dynamic provisioning of PersistentVolumes.
+
+PV Will have Access Modes:
+============================
+ReadWriteOnce – the volume can be mounted as read-write by a single node = EBS 
+ReadOnlyMany  – the volume can be mounted read-only by many nodes
+ReadWriteMany – the volume can be mounted as read-write by many nodes = NFS 
+
+   ebs / nfs-efs 
+
+Claim Policies
+================
+A Persistent Volume Claim can have several different claim policies associated with it including
+Retain – When the claim(PVC) is deleted, the volume(PV) will exists.
+Recycle – When the claim is deleted the volume remains but in a state where the data can be manually recovered.
+Delete – The persistent volume is deleted when the claim is deleted.
+
+The claim policy (associated at the PV and not the PVC) is responsible for what happens to the data when the claim is deleted.
+
+kubectl exec -it mongodb-6hs5v  -- bash
+mongosh -u devdb -p devdb@123 localhost:27017
+show databases;
+use users;
+show collections; 
+use users;
+switched to db users
+users> show collections;
+users
+users> db.users.find();
+
+
+https://www.mongodb.com/docs/manual/replication/
